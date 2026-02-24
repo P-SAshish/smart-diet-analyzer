@@ -6,92 +6,91 @@ function Result() {
 
   if (!location.state) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
-        <h2>No Data Found</h2>
+      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
+        <h2>No data found. Please fill the form first.</h2>
       </div>
     );
   }
 
   const {
-    requiredCalories,
-    perMealCalories,
-    consumedCalories,
     age,
     weight,
     height,
     meals,
     activity,
+    totalCalories,
+    perMealCalories,
+    consumedCalories,
   } = location.state;
 
-  const difference = consumedCalories - requiredCalories;
+  // 🔥 Determine calorie status
+  let status = "";
+  let message = "";
 
-  let statusMessage = "";
-  let statusColor = "";
+  const difference = consumedCalories - totalCalories;
 
-  if (difference > 100) {
-    statusMessage = "You are in Calorie Surplus.";
-    statusColor = "text-red-400";
-  } else if (difference < -100) {
-    statusMessage = "You are in Calorie Deficit.";
-    statusColor = "text-yellow-400";
+  if (Math.abs(difference) <= 100) {
+    status = "Balanced ⚖";
+    message = "Great job! Your calorie intake matches your requirement.";
+  } else if (difference > 100) {
+    status = "Calorie Surplus 🔺";
+    message =
+      "You are consuming more calories than required. This may lead to weight gain.";
   } else {
-    statusMessage = "You are Balanced. Great job!";
-    statusColor = "text-green-400";
+    status = "Calorie Deficit 🔻";
+    message =
+      "You are consuming fewer calories than required. This may lead to weight loss.";
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white px-6 py-12">
+    <div className="min-h-screen bg-slate-950 text-white p-6">
       <h1 className="text-4xl font-bold text-center mb-10">
         Your Diet Analysis
       </h1>
 
-      <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-
-        {/* Required Calories */}
-        <div className="bg-slate-900 p-8 rounded-2xl shadow-xl text-center">
-          <h3 className="text-lg text-gray-400">Required Daily Calories</h3>
+      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="bg-slate-900 p-6 rounded-2xl text-center">
+          <h3 className="text-gray-400">Total Daily Calories Needed</h3>
           <p className="text-3xl font-bold text-purple-400 mt-3">
-            {requiredCalories} kcal
+            {totalCalories} kcal
           </p>
         </div>
 
-        {/* Consumed Calories */}
-        <div className="bg-slate-900 p-8 rounded-2xl shadow-xl text-center">
-          <h3 className="text-lg text-gray-400">Calories Consumed</h3>
+        <div className="bg-slate-900 p-6 rounded-2xl text-center">
+          <h3 className="text-gray-400">Calories Consumed</h3>
           <p className="text-3xl font-bold text-pink-400 mt-3">
             {consumedCalories} kcal
           </p>
         </div>
 
-        {/* Per Meal */}
-        <div className="bg-slate-900 p-8 rounded-2xl shadow-xl text-center md:col-span-2">
-          <h3 className="text-lg text-gray-400">Calories Per Meal</h3>
+        <div className="bg-slate-900 p-6 rounded-2xl text-center md:col-span-2">
+          <h3 className="text-gray-400">Calories Per Meal</h3>
           <p className="text-2xl font-bold mt-3">
             {perMealCalories} kcal
           </p>
         </div>
 
-        {/* User Details */}
-        <div className="bg-slate-900 p-8 rounded-2xl shadow-xl md:col-span-2">
-          <h3 className="text-xl font-semibold mb-4">Your Details</h3>
-          <p>Age: {age}</p>
-          <p>Weight: {weight} kg</p>
-          <p>Height: {height} cm</p>
-          <p>Meals per day: {meals}</p>
-          <p>Activity Level: {activity}</p>
-
-          <p className={`mt-6 text-lg font-semibold ${statusColor}`}>
-            {statusMessage}
-          </p>
+        {/* 🔥 Conclusion Card */}
+        <div className="bg-slate-800 p-6 rounded-2xl text-center md:col-span-2">
+          <h3 className="text-xl font-semibold mb-3">Conclusion</h3>
+          <p className="text-2xl font-bold mb-2">{status}</p>
+          <p className="text-gray-300">{message}</p>
         </div>
       </div>
 
-      <div className="flex justify-center mt-10">
+      <div className="text-center mt-10 space-x-4">
         <button
-          onClick={() => navigate("/dietform")}
-          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg font-semibold"
+          onClick={() => navigate("/form")}
+          className="bg-purple-600 px-6 py-3 rounded-xl hover:bg-purple-700 transition"
         >
-          Re-Analyze
+          Analyze Again
+        </button>
+
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="bg-green-600 px-6 py-3 rounded-xl hover:bg-green-700 transition"
+        >
+          Go to Admin Dashboard
         </button>
       </div>
     </div>

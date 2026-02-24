@@ -10,17 +10,18 @@ function DietForm() {
     height: "",
     meals: "",
     activity: "low",
-    food: "",
+    breakfast: "none",
+    lunch: "none",
+    dinner: "none",
+    snacks: "none",
   });
 
-  const foodDatabase = {
-    rice: 200,
-    egg: 70,
-    milk: 150,
-    bread: 80,
-    chicken: 250,
-    apple: 95,
-    banana: 105,
+  // Structured Meal Calorie Database
+  const mealCalories = {
+    breakfast: { none: 0, light: 300, moderate: 500, heavy: 700 },
+    lunch: { none: 0, light: 500, moderate: 700, heavy: 900 },
+    dinner: { none: 0, light: 400, moderate: 600, heavy: 800 },
+    snacks: { none: 0, light: 150, moderate: 300, heavy: 500 },
   };
 
   const handleChange = (e) => {
@@ -31,7 +32,7 @@ function DietForm() {
   };
 
   const calculateCalories = () => {
-    const { age, weight, height, meals, activity, food } = formData;
+    const { age, weight, height, meals, activity } = formData;
 
     let requiredCalories =
       10 * Number(weight) +
@@ -42,18 +43,14 @@ function DietForm() {
     if (activity === "medium") requiredCalories *= 1.2;
     if (activity === "high") requiredCalories *= 1.4;
 
-    let consumedCalories = 0;
-    const foods = food.toLowerCase().split(",");
-
-    foods.forEach((item) => {
-      const trimmed = item.trim();
-      if (foodDatabase[trimmed]) {
-        consumedCalories += foodDatabase[trimmed];
-      }
-    });
+    const consumedCalories =
+      mealCalories.breakfast[formData.breakfast] +
+      mealCalories.lunch[formData.lunch] +
+      mealCalories.dinner[formData.dinner] +
+      mealCalories.snacks[formData.snacks];
 
     return {
-      requiredCalories: Math.round(requiredCalories),
+      totalCalories: Math.round(requiredCalories),
       perMealCalories: Math.round(requiredCalories / Number(meals)),
       consumedCalories,
     };
@@ -130,14 +127,21 @@ function DietForm() {
             <option value="high">High Activity</option>
           </select>
 
-          <textarea
-            name="food"
-            placeholder="Enter foods eaten today (comma separated e.g. rice, egg, milk)"
-            value={formData.food}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 rounded-lg bg-slate-800 text-white border border-slate-700"
-          />
+          {/* Meal Selection */}
+          {["breakfast", "lunch", "dinner", "snacks"].map((meal) => (
+            <select
+              key={meal}
+              name={meal}
+              value={formData[meal]}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-lg bg-slate-800 text-white border border-slate-700 capitalize"
+            >
+              <option value="none">{meal} - None</option>
+              <option value="light">{meal} - Light</option>
+              <option value="moderate">{meal} - Moderate</option>
+              <option value="heavy">{meal} - Heavy</option>
+            </select>
+          ))}
 
           <button
             type="submit"
