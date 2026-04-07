@@ -56,17 +56,48 @@ function DietForm() {
     };
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const result = calculateCalories();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    navigate("/result", {
-      state: {
-        ...formData,
-        ...result,
-      },
-    });
+  const result = calculateCalories();
+
+  const difference = result.consumedCalories - result.totalCalories;
+
+  let status = "Balanced";
+
+  if (difference > 100) status = "Surplus";
+  else if (difference < -100) status = "Deficit";
+
+  const payload = {
+    age: Number(formData.age),
+    weight: Number(formData.weight),
+    height: Number(formData.height),
+    activity: formData.activity,
+    totalCalories: result.totalCalories,
+    consumedCalories: result.consumedCalories,
+    status: status
   };
+
+  try {
+    await fetch("http://localhost:4000/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.log("Backend save failed");
+  }
+
+  navigate("/result", {
+    state: {
+      ...formData,
+      ...result,
+      status
+    },
+  });
+};
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6">
