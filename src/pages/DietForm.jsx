@@ -79,7 +79,7 @@ function DietForm() {
   };
 
   try {
-    await fetch("http://localhost:4000/save", {
+       await fetch("https://smart-diet-backend.onrender.com/save", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

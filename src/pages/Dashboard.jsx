@@ -4,7 +4,7 @@ function Dashboard() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/history")
+    fetch("https://smart-diet-backend.onrender.com/history")
       .then((res) => res.json())
       .then((result) => setData(result));
   }, []);
