@@ -7,10 +7,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/dietdb")
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+mongoose.connect(
+"mongodb+srv://ashmitha6628_db_user:cNvFVmNPglZr3mxu@smart-diet-cluster.pcmukdr.mongodb.net/dietdb?retryWrites=true&w=majority"
+)
+.then(() => console.log("MongoDB Connected"))
+.catch((err) => console.log(err));
 
 const DietSchema = new mongoose.Schema({
   age: Number,
@@ -22,14 +23,7 @@ const DietSchema = new mongoose.Schema({
   status: String,
 });
 
-mongoose.connect("mongodb+srv://ashmitha6628_db_user:cNvFVmNPglZr3mxu@smart-diet-cluster.pcmukdr.mongodb.net/dietdb?retryWrites=true&w=majority")
-  .then(() => {
-    console.log("MongoDB Connected");
-    app.listen(4000, () => {
-      console.log("Server running on port 4000");
-    });
-  })
-  .catch((err) => console.log(err));
+const Diet = mongoose.model("Diet", DietSchema);
 
 app.post("/save", async (req, res) => {
   try {
@@ -40,9 +34,11 @@ app.post("/save", async (req, res) => {
     res.status(500).json({ error: "Save failed" });
   }
 });
+
 app.get("/", (req, res) => {
   res.send("Backend working");
 });
+
 app.get("/history", async (req, res) => {
   try {
     const data = await Diet.find();
