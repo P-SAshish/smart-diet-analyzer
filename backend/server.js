@@ -8,10 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(
-"mongodb+srv://ashmitha6628_db_user:cNvFVmNPglZr3mxu@smart-diet-cluster.pcmukdr.mongodb.net/dietdb?retryWrites=true&w=majority"
+"mongodb+srv://ashmitha6628_db_user:Ashish%40123shiva@smart-diet-cluster.pcmukdr.mongodb.net/dietdb?retryWrites=true&w=majority"
 )
 .then(() => console.log("MongoDB Connected"))
-.catch((err) => console.log(err));
+.catch(err => console.log(err));
 
 const DietSchema = new mongoose.Schema({
   age: Number,
