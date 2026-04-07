@@ -22,7 +22,14 @@ const DietSchema = new mongoose.Schema({
   status: String,
 });
 
-const Diet = mongoose.model("Diet", DietSchema);
+mongoose.connect("mongodb+srv://ashmitha6628_db_user:cNvFVmNPglZr3mxu@smart-diet-cluster.pcmukdr.mongodb.net/dietdb?retryWrites=true&w=majority")
+  .then(() => {
+    console.log("MongoDB Connected");
+    app.listen(4000, () => {
+      console.log("Server running on port 4000");
+    });
+  })
+  .catch((err) => console.log(err));
 
 app.post("/save", async (req, res) => {
   try {
