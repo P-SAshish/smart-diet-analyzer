@@ -79,12 +79,12 @@ function DietForm() {
   };
 
   try {
-       await fetch("https://smart-diet-backend.onrender.com/save", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      await fetch("https://smart-diet-backend.onrender.com/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
     });
   } catch (error) {
     console.log("Backend save failed");
